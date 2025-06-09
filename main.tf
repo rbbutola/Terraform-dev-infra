@@ -9,6 +9,6 @@ terraform {
 }
 
 provider "aws" {
-  region  = "ap-south-1"
-  profile = "default"
+  region = "ap-south-1"
+  # Remove 'profile' because CodeBuild uses IAM role credentials
 }
