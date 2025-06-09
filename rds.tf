@@ -1,0 +1,71 @@
+# DB Subnet Group using private DB subnets
+resource "aws_db_subnet_group" "sybil_health_dev_rds_subnet_group" {
+  name = "sybil_health_dev_rds_subnet_group"
+  subnet_ids = [
+    aws_subnet.sybil-health-pridb1.id,
+    aws_subnet.sybil-health-pridb2.id
+  ]
+
+  tags = {
+    Name = "sybil_health_dev_rds_subnet_group"
+  }
+}
+
+# PostgreSQL Parameter Group to enable logging
+resource "aws_db_parameter_group" "postgresql_logs" {
+  name        = "sybil-health-postgres-logs"
+  family      = "postgres17"
+  description = "Enable PostgreSQL logging"
+
+  parameter {
+    name  = "log_statement"
+    value = "all"
+  }
+
+  parameter {
+    name  = "log_min_duration_statement"
+    value = "0"
+  }
+
+  parameter {
+    name  = "log_connections"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_disconnections"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_error_verbosity"
+    value = "default"
+  }
+}
+
+# PostgreSQL RDS instance
+resource "aws_db_instance" "sybil-health-dev-database" {
+  identifier                     = "sybil-health-dev-database"
+  engine                         = "postgres"
+  engine_version                 = "17.4"
+  instance_class                 = "db.t3.medium"
+  allocated_storage              = 20
+  storage_type                   = "gp2"
+  db_name                        = "sybilhealthdevdb"
+  username                       = "sybil_dev_admin"
+  password                       = "StrongPassword123!" # Use Secrets Manager in real apps
+  db_subnet_group_name           = aws_db_subnet_group.sybil_health_dev_rds_subnet_group.name
+  vpc_security_group_ids         = [aws_security_group.sybil_health_dev_database.id]
+  parameter_group_name           = aws_db_parameter_group.postgresql_logs.name
+  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
+  skip_final_snapshot            = true
+  publicly_accessible            = false
+  multi_az                       = false
+  backup_retention_period        = 15
+  auto_minor_version_upgrade     = false
+
+  tags = {
+    Name = "sybil-health-dev-database"
+  }
+}
+
