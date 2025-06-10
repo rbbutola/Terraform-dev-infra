@@ -77,6 +77,7 @@ resource "aws_db_instance" "sybil-health-dev-database" {
   backup_retention_period        = 15
   auto_minor_version_upgrade     = false
   deletion_protection            = true
+  storage_encrypted              = true
   tags = {
     Name = "sybil-health-dev-database"
   }
