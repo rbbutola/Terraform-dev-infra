@@ -1,3 +1,16 @@
+# Fetch RDS credentials from Secrets Manager
+data "aws_secretsmanager_secret" "rds_secret" {
+  name = "sybil-health-dev-master-dbsecret"
+}
+
+data "aws_secretsmanager_secret_version" "rds_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.rds_secret.id
+}
+
+locals {
+  db_credentials = jsondecode(data.aws_secretsmanager_secret_version.rds_secret_version.secret_string)
+}
+
 # DB Subnet Group using private DB subnets
 resource "aws_db_subnet_group" "sybil_health_dev_rds_subnet_group" {
   name = "sybil_health_dev_rds_subnet_group"
@@ -52,8 +65,8 @@ resource "aws_db_instance" "sybil-health-dev-database" {
   allocated_storage              = 20
   storage_type                   = "gp2"
   db_name                        = "sybilhealthdevdb"
-  username                       = "sybil_dev_admin"
-  password                       = "StrongPassword123!" # Use Secrets Manager in real apps
+  username                       = local.db_credentials.username
+  password                       = local.db_credentials.password
   db_subnet_group_name           = aws_db_subnet_group.sybil_health_dev_rds_subnet_group.name
   vpc_security_group_ids         = [aws_security_group.sybil_health_dev_database.id]
   parameter_group_name           = aws_db_parameter_group.postgresql_logs.name
@@ -68,4 +81,3 @@ resource "aws_db_instance" "sybil-health-dev-database" {
     Name = "sybil-health-dev-database"
   }
 }
-
