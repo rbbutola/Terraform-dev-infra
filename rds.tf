@@ -62,7 +62,7 @@ resource "aws_db_instance" "sybil-health-dev-database" {
   engine                         = "postgres"
   engine_version                 = "17.4"
   instance_class                 = "db.t3.medium"
-  allocated_storage              = 20
+  allocated_storage              = 30
   storage_type                   = "gp2"
   db_name                        = "sybilhealthdevdb"
   username                       = local.db_credentials.username
@@ -74,7 +74,7 @@ resource "aws_db_instance" "sybil-health-dev-database" {
   skip_final_snapshot            = true
   publicly_accessible            = false
   multi_az                       = false
-  backup_retention_period        = 15
+  backup_retention_period        = 14
   auto_minor_version_upgrade     = false
   deletion_protection            = true
   storage_encrypted              = true
