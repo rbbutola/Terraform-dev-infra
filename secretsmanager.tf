@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "db_secret" {
-  name = "sybil-health-dev-env1-dbsecret"
+  name = "sybil-health-dev-env2-dbsecret"
 }
 
 resource "aws_secretsmanager_secret_version" "db_secret_version" {
