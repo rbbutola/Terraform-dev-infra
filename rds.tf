@@ -24,38 +24,6 @@ resource "aws_db_subnet_group" "sybil_health_dev_rds_subnet_group" {
   }
 }
 
-# PostgreSQL Parameter Group to enable logging
-resource "aws_db_parameter_group" "postgresql_logs" {
-  name        = "sybil-health-postgres-logs"
-  family      = "postgres17"
-  description = "Enable PostgreSQL logging"
-
-  parameter {
-    name  = "log_statement"
-    value = "all" # Consider changing to 'ddl' or 'mod' in production to reduce log volume
-  }
-
-  parameter {
-    name  = "log_min_duration_statement"
-    value = "0"
-  }
-
-  parameter {
-    name  = "log_connections"
-    value = "1"
-  }
-
-  parameter {
-    name  = "log_disconnections"
-    value = "1"
-  }
-
-  parameter {
-    name  = "log_error_verbosity"
-    value = "default"
-  }
-}
-
 # PostgreSQL RDS instance
 resource "aws_db_instance" "sybil-health-dev-database" {
   identifier                     = "sybil-health-dev-database"
@@ -69,7 +37,7 @@ resource "aws_db_instance" "sybil-health-dev-database" {
   password                       = local.db_credentials.password
   db_subnet_group_name           = aws_db_subnet_group.sybil_health_dev_rds_subnet_group.name
   vpc_security_group_ids         = [aws_security_group.sybil_health_dev_database.id]
-  parameter_group_name           = aws_db_parameter_group.postgresql_logs.name
+  parameter_group_name           = aws_db_parameter_group.sybil_health_dev_rds_parameter_group.name
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
   skip_final_snapshot            = true
   publicly_accessible            = false
