@@ -1,8 +1,10 @@
 resource "aws_lambda_function" "sybil_health_dev_lambda" {
-  function_name = "sybil_health_dev_lambda"
-  role          = aws_iam_role.sybil_health_dev_lambda_exec_role.arn
-  runtime       = "nodejs18.x"
-  handler       = "lambda_function.handler"
+  function_name    = "sybil_health_dev_lambda"
+  handler          = "lambda_function.handler"
+  runtime          = "nodejs18.x"
+  role             = aws_iam_role.sybil_health_dev_lambda_exec_role.arn
+  filename         = "${path.module}/sybil-health-dev-lambda.zip"
+  source_code_hash = filebase64sha256("${path.module}/sybil-health-dev-lambda.zip")
 
   vpc_config {
     subnet_ids = [
@@ -14,10 +16,15 @@ resource "aws_lambda_function" "sybil_health_dev_lambda" {
     ]
   }
 
-  publish = false  # prevents unnecessary versioning
-
   tags = {
     Name = "sybil-health-dev-lambda"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      filename,
+      source_code_hash
+    ]
   }
 
   depends_on = [
