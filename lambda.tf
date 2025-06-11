@@ -1,10 +1,8 @@
 resource "aws_lambda_function" "sybil_health_dev_lambda" {
-  function_name    = "sybil_health_dev_lambda"
-  handler          = "lambda_function.handler"
-  runtime          = "nodejs18.x"
-  role             = aws_iam_role.sybil_health_dev_lambda_exec_role.arn
-  filename         = "${path.module}/sybil-health-dev-lambda.zip"
-  source_code_hash = filebase64sha256("${path.module}/sybil-health-dev-lambda.zip")
+  function_name = "sybil_health_dev_lambda"
+  handler       = "lambda_function.handler"
+  runtime       = "nodejs18.x"
+  role          = aws_iam_role.sybil_health_dev_lambda_exec_role.arn
 
   vpc_config {
     subnet_ids = [
@@ -12,7 +10,7 @@ resource "aws_lambda_function" "sybil_health_dev_lambda" {
       aws_subnet.sybil-health-pri2.id,
     ]
     security_group_ids = [
-      aws_security_group.sybil-health-dev-vpc-sg.id # Note: consistent naming with your SG resource
+      aws_security_group.sybil-health-dev-vpc-sg.id
     ]
   }
 
