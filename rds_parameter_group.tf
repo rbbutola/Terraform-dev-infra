@@ -1,16 +1,16 @@
 resource "aws_db_parameter_group" "sybil_health_dev_rds_parameter_group" {
-  name        = "sybil_health_dev_rds_parameter_group"
+  name        = "sybil-health-dev-rds-parameter-group"
   family      = "postgres17"
   description = "PostgreSQL parameter group with slow query logging enabled"
 
   parameter {
     name  = "log_statement"
-    value = "ddl" # Use "mod" or "all" for more verbosity, adjust per environment
+    value = "ddl"
   }
 
   parameter {
     name  = "log_min_duration_statement"
-    value = "1000" # Log queries slower than 1 second (in milliseconds)
+    value = "1000"
   }
 
   parameter {
