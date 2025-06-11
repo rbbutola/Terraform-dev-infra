@@ -35,7 +35,7 @@ resource "aws_cloudwatch_metric_alarm" "sybil_health_dev_rds_high_cpu" {
   metric_name         = "CPUUtilization"
   namespace           = "AWS/RDS"
   period              = 300
-  statistic           = "Average"
+  statistic           = "Maximum"
   threshold           = 70
   alarm_description   = "RDS CPU utilization exceeds 70% for 5 minutes"
   dimensions = {
