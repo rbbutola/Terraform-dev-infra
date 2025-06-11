@@ -18,7 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "sybil_health_dev_rds_high_connections" {
   metric_name         = "DatabaseConnections"
   namespace           = "AWS/RDS"
   period              = 300
-  statistic           = "Average"
+  statistic           = "Maximum"
   threshold           = 50
   alarm_description   = "Database connections exceed 50"
   dimensions = {
@@ -86,7 +86,7 @@ resource "aws_cloudwatch_metric_alarm" "sybil_health_dev_rds_high_read_iops" {
   metric_name         = "ReadIOPS"
   namespace           = "AWS/RDS"
   period              = 300
-  statistic           = "Average"
+  statistic           = "Maximum"
   threshold           = 1000
   alarm_description   = "Read IOPS exceed 1000"
   dimensions = {
@@ -103,7 +103,7 @@ resource "aws_cloudwatch_metric_alarm" "sybil_health_dev_rds_high_write_iops" {
   metric_name         = "WriteIOPS"
   namespace           = "AWS/RDS"
   period              = 300
-  statistic           = "Average"
+  statistic           = "Maximum"
   threshold           = 1000
   alarm_description   = "Write IOPS exceed 1000"
   dimensions = {
