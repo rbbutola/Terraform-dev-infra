@@ -32,7 +32,7 @@ resource "aws_db_parameter_group" "postgresql_logs" {
 
   parameter {
     name  = "log_statement"
-    value = "all"
+    value = "all" # Consider changing to 'ddl' or 'mod' in production to reduce log volume
   }
 
   parameter {
@@ -73,10 +73,10 @@ resource "aws_db_instance" "sybil-health-dev-database" {
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
   skip_final_snapshot            = true
   publicly_accessible            = false
-  multi_az                       = false
+#  multi_az                      = false
   backup_retention_period        = 14
   auto_minor_version_upgrade     = false
-#  deletion_protection            = true
+#  deletion_protection           = true
   storage_encrypted              = true
   apply_immediately              = true
   tags = {
