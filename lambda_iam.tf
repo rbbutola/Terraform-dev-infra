@@ -47,7 +47,6 @@ resource "aws_iam_role_policy_attachment" "sybil_health_dev_lambda_secret_policy
   policy_arn = aws_iam_policy.sybil_health_dev_lambda_secret_policy.arn
 }
 
-# New: S3 access policy for Lambda to get and put objects in sybil-health-dev-bucket
 resource "aws_iam_policy" "sybil_health_dev_lambda_s3_policy" {
   name = "sybil_health_dev_lambda_s3_access"
 
@@ -69,4 +68,31 @@ resource "aws_iam_policy" "sybil_health_dev_lambda_s3_policy" {
 resource "aws_iam_role_policy_attachment" "sybil_health_dev_lambda_s3_policy_attachment" {
   role       = aws_iam_role.sybil_health_dev_lambda_exec_role.name
   policy_arn = aws_iam_policy.sybil_health_dev_lambda_s3_policy.arn
+}
+
+# ➕ Cognito Access Policy
+resource "aws_iam_policy" "sybil_health_dev_lambda_cognito_policy" {
+  name = "sybil_health_dev_lambda_cognito_access"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "cognito-idp:AdminCreateUser",
+          "cognito-idp:AdminGetUser",
+          "cognito-idp:AdminInitiateAuth",
+          "cognito-idp:AdminRespondToAuthChallenge",
+          "cognito-idp:ListUsers"
+        ],
+        Resource = aws_cognito_user_pool.sybil_health_user_pool.arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "sybil_health_dev_lambda_cognito_policy_attachment" {
+  role       = aws_iam_role.sybil_health_dev_lambda_exec_role.name
+  policy_arn = aws_iam_policy.sybil_health_dev_lambda_cognito_policy.arn
 }
