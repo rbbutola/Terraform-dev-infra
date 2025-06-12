@@ -22,7 +22,3 @@ output "sybil-health-dev-vpc-sg" {
 output "cognito_user_pool_id" {
   value = aws_cognito_user_pool.sybil_health_user_pool.id
 }
-
-output "cognito_user_pool_client_id" {
-  value = aws_cognito_user_pool_client.sybil_health_user_pool_client.id
-}
