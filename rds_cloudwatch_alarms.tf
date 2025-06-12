@@ -52,7 +52,7 @@ resource "aws_cloudwatch_metric_alarm" "sybil_health_dev_rds_low_memory" {
   metric_name         = "FreeableMemory"
   namespace           = "AWS/RDS"
   period              = 300
-  statistic           = "Average"
+  statistic           = "Minimum"
   threshold           = 2147483648  # 2 GB
   alarm_description   = "Freeable memory is less than 2 GB"
   dimensions = {
@@ -69,7 +69,7 @@ resource "aws_cloudwatch_metric_alarm" "sybil_health_dev_rds_low_storage" {
   metric_name         = "FreeStorageSpace"
   namespace           = "AWS/RDS"
   period              = 300
-  statistic           = "Average"
+  statistic           = "Minimum"
   threshold           = 26843545600  # 25 GB
   alarm_description   = "Available storage space is less than 25 GB"
   dimensions = {
